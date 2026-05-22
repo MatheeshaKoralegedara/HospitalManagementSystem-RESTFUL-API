@@ -1,17 +1,30 @@
 package com.hospital.management.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.List;
 
 @Entity
 @Table(name = "doctors")
 public class Doctor extends User {
+    @NotBlank(message = "Specialization is required")
     private String specialization;
+
     private String qualification;
+
+    @PositiveOrZero(message = "Years of experience cannot be negative")
     private int yearsOfExperience;
+
+    @NotBlank(message = "Department is required")
     private String department;
+
+    @PositiveOrZero(message = "Salary cannot be negative")
     private double salary;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "doctor", cascade = CascadeType.ALL)
     private List<Appointment> appointments;
 

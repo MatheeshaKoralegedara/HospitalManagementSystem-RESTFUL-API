@@ -1,7 +1,9 @@
 package com.hospital.management.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import jakarta.validation.constraints.NotBlank;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "appointments")
@@ -18,9 +20,14 @@ public class Appointment {
     @JoinColumn(name = "doctor_id")
     private Doctor doctor;
 
-    private Date appointmentDate;
+    @Column(nullable = false)
+    private LocalDateTime appointmentDate;
+
     private String timeSlot;
+
+    @NotBlank(message = "Status is required")
     private String status; // Scheduled, Completed, Cancelled
+
     private String reason;
 
     // Getters and setters
@@ -48,11 +55,11 @@ public class Appointment {
         this.doctor = doctor;
     }
 
-    public Date getAppointmentDate() {
+    public LocalDateTime getAppointmentDate() {
         return appointmentDate;
     }
 
-    public void setAppointmentDate(Date appointmentDate) {
+    public void setAppointmentDate(LocalDateTime appointmentDate) {
         this.appointmentDate = appointmentDate;
     }
 

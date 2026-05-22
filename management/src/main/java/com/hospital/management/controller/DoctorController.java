@@ -2,6 +2,7 @@ package com.hospital.management.controller;
 
 import com.hospital.management.model.Doctor;
 import com.hospital.management.service.DoctorService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +12,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/doctors")
-@CrossOrigin("*")
 public class DoctorController {
 
     @Autowired
     private DoctorService doctorService;
 
     @PostMapping
-    public ResponseEntity<Doctor> saveDoctor(@RequestBody Doctor doctor) {
+    public ResponseEntity<Doctor> saveDoctor(@Valid @RequestBody Doctor doctor) {
         return new ResponseEntity<>(doctorService.saveDoctor(doctor), HttpStatus.CREATED);
     }
 
@@ -34,14 +34,14 @@ public class DoctorController {
 
     @PutMapping("{id}")
     public ResponseEntity<Doctor> updateDoctor(@PathVariable("id") Long id,
-                                               @RequestBody Doctor doctor) {
-        return new ResponseEntity<>(doctorService.updateDoctor(doctor, id), HttpStatus.OK);
+                                               @Valid @RequestBody Doctor doctor) {
+        return ResponseEntity.ok(doctorService.updateDoctor(doctor, id));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteDoctor(@PathVariable("id") Long id) {
         doctorService.deleteDoctor(id);
-        return new ResponseEntity<>("Doctor deleted successfully", HttpStatus.OK);
+        return ResponseEntity.ok("Doctor deleted successfully");
     }
 
     @GetMapping("/specialization/{specialization}")

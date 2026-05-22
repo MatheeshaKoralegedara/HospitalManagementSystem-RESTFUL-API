@@ -1,26 +1,28 @@
 package com.hospital.management.controller;
 
+import com.hospital.management.dto.AppointmentRequest;
 import com.hospital.management.model.Appointment;
 import com.hospital.management.service.AppointmentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/appointments")
-@CrossOrigin("*")
 public class AppointmentController {
 
     @Autowired
     private AppointmentService appointmentService;
 
     @PostMapping
-    public ResponseEntity<Appointment> saveAppointment(@RequestBody Appointment appointment) {
-        return new ResponseEntity<>(appointmentService.saveAppointment(appointment), HttpStatus.CREATED);
+    public ResponseEntity<Appointment> saveAppointment(@Valid @RequestBody AppointmentRequest appointmentRequest) {
+        return new ResponseEntity<>(appointmentService.saveAppointment(appointmentRequest), HttpStatus.CREATED);
     }
 
     @GetMapping
@@ -35,19 +37,19 @@ public class AppointmentController {
 
     @PutMapping("{id}")
     public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") Long id,
-                                                         @RequestBody Appointment appointment) {
-        return new ResponseEntity<>(appointmentService.updateAppointment(appointment, id), HttpStatus.OK);
+                                                         @Valid @RequestBody AppointmentRequest appointmentRequest) {
+        return ResponseEntity.ok(appointmentService.updateAppointment(appointmentRequest, id));
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteAppointment(@PathVariable("id") Long id) {
         appointmentService.deleteAppointment(id);
-        return new ResponseEntity<>("Appointment deleted successfully", HttpStatus.OK);
+        return ResponseEntity.ok("Appointment deleted successfully");
     }
 
     @GetMapping("/doctor/{doctorId}/date/{date}")
     public List<Appointment> getAppointmentsByDoctorAndDate(@PathVariable Long doctorId,
-                                                            @PathVariable Date date) {
+                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime date) {
         return appointmentService.getAppointmentsByDoctorAndDate(doctorId, date);
     }
 

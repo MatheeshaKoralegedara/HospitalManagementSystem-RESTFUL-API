@@ -1,6 +1,7 @@
 package com.hospital.management.service.impl;
 
 import com.hospital.management.model.Doctor;
+import com.hospital.management.exception.ResourceNotFoundException;
 import com.hospital.management.repository.DoctorRepository;
 import com.hospital.management.service.DoctorService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class DoctorServiceImpl implements DoctorService {
     @Override
     public Doctor getDoctorById(Long id) {
         Optional<Doctor> doctor = doctorRepository.findById(id);
-        return doctor.orElseThrow(() -> new RuntimeException("Doctor not found with id: " + id));
+        return doctor.orElseThrow(() -> new ResourceNotFoundException("Doctor not found with id: " + id));
     }
 
     @Override
@@ -47,6 +48,9 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public void deleteDoctor(Long id) {
+        if (!doctorRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Doctor not found with id: " + id);
+        }
         doctorRepository.deleteById(id);
     }
 

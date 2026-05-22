@@ -1,14 +1,20 @@
 package com.hospital.management.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import jakarta.validation.constraints.NotBlank;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "patients")
 public class Patient extends User {
     private String bloodGroup;
-    private Date dateOfBirth;
+
+    private LocalDate dateOfBirth;
+
+    @NotBlank(message = "Gender is required")
     private String gender;
+
     private String medicalHistory;
 
     // Getters and setters
@@ -20,11 +26,11 @@ public class Patient extends User {
         this.bloodGroup = bloodGroup;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
